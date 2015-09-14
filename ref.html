@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" >
+	<title>Learn React</title>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/javascript" src="react.min.js"></script>
+	<script type="text/javascript" src="JSXTransformer.js"></script>
+	<script type="text/jsx">
+	var FormApp = React.createClass({
+		getInitialState: function() {
+			return {
+				inputValue: 'input value',
+				selectValue: 'A',
+				radioValue: 'B',
+				checkValues: [],
+				textareaValue: 'some text here...'
+			}
+		},
+		
+		handleSubmit: function(e) {
+			e.preventDefault();
+			var formData = {
+				input: this.refs.goodInput.getDOMNode().value,
+				select: this.refs.goodSelect.getDOMNode().value,
+				textarea: this.refs.goodTextarea.getDOMNode().value,
+				radio: this.state.radioValue,
+				check: this.state.checkValues,
+			};
+			console.log('form submitting....');
+			console.log(formData);
+		},
+
+		handleRadio: function(e) {
+			this.setState({
+				radioValue: e.target.value,
+			})
+		},
+
+		handleCheck: function(e) {
+			var checkValues = this.state.checkValues.slice();
+			var newVal = e.target.value;
+			var index = checkValues.indexOf(newVal);
+			if(index == -1) {
+				checkValues.push(newVal);
+			}else{
+				checkValues.splice(index,1);
+			}
+
+			this.setState({
+				checkValues: checkValues,
+			})
+		},
+		
+
+		render: function() {
+			return (
+				<form onSubmit={this.handleSubmit}>
+					<input ref="goodInput" type="text" defaultvalue={this.state.inputValue} /><br />
+					<select defaultvalue={this.state.selectValue} ref="goodSelect">
+						<option value="A">A</option>
+						<option value="B">B</option>
+						<option value="C">C</option>
+						<option value="D">D</option>
+						<option value="E">E</option>
+					</select>
+					<br />
+					<p>Radio button</p>
+					<input onChange={this.handleRadio} name="goodRadio" type="radio" value="A" />
+					<input onChange={this.handleRadio} name="goodRadio" type="radio" defaultChecked value="B" />
+					<input onChange={this.handleRadio} name="goodRadio" type="radio" value="C" />
+					<br />
+					<input onChange={this.handleCheck} name="goodCheckbox" type="checkbox" value="A" />
+					<input onChange={this.handleCheck} name="goodCheckbox" type="checkbox" value="B" />
+					<input onChange={this.handleCheck} name="goodCheckbox" type="checkbox" defaultChecked value="C" />
+					<br />
+					<textarea defaultvalue={this.state.textareaValue} ref="goodTextarea"></textarea>
+					<button type="submit">Submit</button>
+				</form>
+			)
+		}
+	});
+
+	var clickComponent = React.render(
+		<FormApp/>,
+		document.getElementById('app')
+	);
+
+	</script>
+</body>
+</html>
