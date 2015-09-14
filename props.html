@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" >
+	<title>Learn React</title>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/javascript" src="react.min.js"></script>
+	<script type="text/javascript" src="JSXTransformer.js"></script>
+	<script type="text/jsx">
+		var MessageBox = React.createClass({
+			getInitialState: function() {
+				return {
+					isVisible: true,
+					titleMessage: 'Hello world(come from state)',
+					subMessages:[
+						'Can write code',
+						'Take zhuang',
+						'Don\'t talk',
+					]
+				}
+			},
+			render: function(){
+				
+				return (
+					<div>
+						<h1>{this.state.titleMessage}</h1>
+						<Submessage message={this.state.subMessages} />
+					</div>
+				);
+			}
+		});
+
+		var Submessage = React.createClass({
+			propTypes: {
+				messages: React.PropTypes.array.isRequired,
+			},
+			getDefaultProps: function() {
+				return {
+					messages: ['Default message'],
+				}
+			},
+			render: function() {
+				var msgs = [];
+				this.props.message.forEach(function(msg,index){
+					msgs.push(
+						<p>{msg}</p>)
+				})
+				return (
+					<div>{msgs}</div>
+				)
+			}
+		});
+
+		var Footer = React.createClass({
+			render: function() {
+				return (
+					<div>
+						<small>It's interesting for write code</small>
+					</div>
+				)
+			}
+		});
+
+		React.render(<MessageBox/>,
+			document.getElementById("app"),
+			function() {
+				console.log('finish');
+			});
+	</script>
+</body>
+</html>
