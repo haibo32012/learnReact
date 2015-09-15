@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" >
+	<title>Learn React</title>
+</head>
+<body>
+	<div id="app"></div>
+	<script type="text/javascript" src="react.min.js"></script>
+	<script type="text/javascript" src="JSXTransformer.js"></script>
+	<script type="text/jsx">
+		var stateRecordMixin = {
+			componentWillMount: function() {
+				this.oldStates = [];
+			},
+			componentWillUpdate: function(nextProp,nextState) {
+				this.oldStates.push(nextState);
+			},
+			previousState: function(){
+				var index = this.oldStates.length-1;
+				return index == -1 ? {} : this.oldStates[index];
+			}
+		}
+
+		var MessageBox = React.createClass({
+			mixins: [stateRecordMixin],
+			getInitialState: function() {
+				return {
+					titleMessage: 'Hello world(come from state)',
+				}
+			},
+
+			getDefaultProps: function() {
+				console.log('getDefaultProps');
+				return {};
+			},
+
+			shouldComponentUpdate: function() {
+				console.log('ShouldComponentUpdate');
+				return true;
+			},
+
+			componentWillUpdate: function() {
+				console.log('componentWillUpdate');
+			},
+
+			componentDidUpdate: function() {
+				console.log('componentDidUpdate');
+
+			},
+
+			killMySelf: function() {
+				React.unmountComponentAtNode(document.getElementById('app'));
+			},
+
+			render: function(){
+				
+				return (
+					<div>
+						<h1>{this.state.titleMessage}</h1>
+						<button onClick={this.killMySelf}>You want kill me</button>
+						<button onClick={this.doUpdate}>Update</button>
+						<Submessage/>
+					</div>
+				);
+			}
+		});
+
+		var Submessage = React.createClass({
+			render: function() {
+				return (
+					<div>
+						<h3>write code is fun!</h3>
+					</div>
+				);
+			}
+		});
+
+		
+		React.render(<MessageBox/>,
+			document.getElementById("app"),
+			function() {
+				console.log('finish');
+			}
+		);
+	</script>
+</body>
+</html>
